@@ -1,4 +1,5 @@
 from .fno import TFNO, FNO, ConditionalFNO
+from .galerkin_transformer import GalerkinTransformer
 
 # only import SFNO if torch_harmonics is built locally
 try:

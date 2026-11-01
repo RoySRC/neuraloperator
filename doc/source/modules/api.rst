@@ -49,6 +49,44 @@ Tensorized FNO (TFNO)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _galerkin_transformer_api:
+
+Galerkin Transformer
+--------------------
+
+``GalerkinTransformer`` implements the static two-dimensional architecture used
+by the authors for Darcy flow: interpolation/convolution downsampling, linear
+Galerkin self-attention, interpolation/convolution upsampling, and a spectral
+decoder. Graph-based variants and temporal rollout models are outside this
+implementation.
+
+Input and output fields use ``(batch, channels, height, width)``. Rectangular
+grids are supported. ``output_shape=(height, width)`` selects a different output
+grid. Optional ``pos`` provides flattened latent-grid coordinates and ``grid``
+provides output-grid coordinates. Default coordinates include both endpoints of
+the unit square in ``xy`` order: the first coordinate varies across width, the
+second across height. The downsample factors are fixed architecture settings;
+the default ``(0.54, 0.54)`` reproduces the author's 211 -> 113 -> 61 path.
+
+``eval()`` disables attention dropout, including the historical functional-dropout
+path that remained active in the original code. Training mode retains dropout.
+``load_author_state_dict(state_dict)`` accepts a matching author's tensor mapping
+strictly; it does not download files or unpickle a full historical model.
+
+The model returns raw normalized outputs. Preserve the original physical
+normalization separately, and apply Dirichlet boundary values after inverse
+normalization. Loading weights alone does not establish pretrained PDE accuracy.
+See :ref:`galerkin_synthetic_example` for synthetic inference without training
+or downloads.
+
+.. autosummary::
+    :toctree: generated
+    :template: class.rst
+
+    GalerkinTransformer
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. _sfno_api:
 
 Spherical Fourier Neural Operators (SFNO)

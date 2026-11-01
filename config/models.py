@@ -233,3 +233,28 @@ class OTNO_Small2d(OTNOConfig):
     hidden_channels: int = 64
     data_channels: int = 9
     out_channels: int = 1
+
+
+class GalerkinTransformerConfig(ModelConfig):
+    """Static 2D Galerkin attention with interpolation and a spectral decoder."""
+
+    model_arch: str = "galerkintransformer"
+    data_channels: int = 1
+    out_channels: int = 1
+    hidden_channels: int = 128
+    n_heads: int = 4
+    n_layers: int = 6
+    dim_feedforward: Optional[int] = None
+    n_modes: int = 12
+    spectral_channels: int = 32
+    n_spectral_layers: int = 2
+    downsample_factors: List[float] = [0.54, 0.54]
+    layer_norm: bool = False
+    attention_norm: bool = True
+    norm_eps: float = 1e-5
+    dropout: float = 0.0
+    encoder_dropout: float = 0.1
+    ffn_dropout: float = 0.05
+    downscaler_dropout: float = 0.05
+    upscaler_dropout: float = 0.0
+    decoder_dropout: float = 0.0
