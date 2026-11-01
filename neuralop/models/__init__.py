@@ -1,4 +1,5 @@
 from .fno import TFNO, FNO, ConditionalFNO
+from .wno import WNO
 
 # only import SFNO if torch_harmonics is built locally
 try:

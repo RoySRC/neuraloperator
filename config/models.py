@@ -233,3 +233,20 @@ class OTNO_Small2d(OTNOConfig):
     hidden_channels: int = 64
     data_channels: int = 9
     out_channels: int = 1
+
+
+class WNOConfig(ModelConfig):
+    """Static 2D Version 1 WNO; coordinates are added to field channels."""
+
+    model_arch: str = "wno"
+    data_channels: int = 1
+    out_channels: int = 1
+    hidden_channels: int = 64
+    n_layers: int = 4
+    input_shape: List[int] = [85, 85]
+    n_modes: Optional[List[int]] = None
+    levels: int = 4
+    wavelet: str = "db4"
+    mode: str = "symmetric"
+    padding: int = 1
+    projection_channels: int = 192

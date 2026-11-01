@@ -49,6 +49,54 @@ Tensorized FNO (TFNO)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _wno_api:
+
+Wavelet Neural Operator (WNO)
+----------------------------
+
+WNO implements the static two-dimensional Version 1 wavelet operator used for
+Darcy flow. Each block learns channel mixing of the coarsest low-pass
+coefficients and the first coarsest detail orientation. The other detail
+orientations and finer-scale coefficients pass through the wavelet branch.
+A pointwise convolution provides the local branch of each block.
+
+Install the optional wavelet dependencies with ``pip install
+'neuraloperator[wavelets]'`` (or ``pip install -e '.[wavelets]'`` from this
+checkout). Other NeuralOperator models remain importable without these
+dependencies.
+
+Inputs and outputs use channel-first grids ``(batch, channels, H, W)``. The
+model appends endpoint-inclusive unit-square coordinates internally, so
+``in_channels`` counts physical field channels only. ``input_shape`` declares
+the spatial grid; runtime inputs must match it. ``n_modes=None`` derives the
+coarse coefficient shape from the chosen grid, padding, wavelet and number of
+levels. Explicit ``n_modes`` must match that derived shape. The model never
+interpolates a field or silently changes the decomposition to accept another
+resolution.
+
+The defaults match the released Version 1 Darcy checkpoint's dimensions:
+an 85 by 85 field, four ``db4`` levels with symmetric extension, hidden width
+64, four operator blocks, one-sided padding of one cell and projection width
+192. The saved checkpoint's projection width is 192 even though a later
+author testing-script constructor defaults to 128. Physical input/output
+normalization remains external to the architecture.
+
+``load_author_state_dict(state_dict)`` accepts a tensor-only state dictionary
+with the original parameter names. It performs strict key and shape checks;
+the caller must also match non-tensor settings such as wavelet, boundary mode,
+decomposition depth and input grid. Construction does not download or load
+pretrained weights. This implementation does not include the authors' later
+Version 2 architectures or time-dependent rollout variants. See
+:ref:`wno_synthetic_example` for a small synthetic example.
+
+.. autosummary::
+    :toctree: generated
+    :template: class.rst
+
+    WNO
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. _sfno_api:
 
 Spherical Fourier Neural Operators (SFNO)

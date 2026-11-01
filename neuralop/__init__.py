@@ -1,6 +1,6 @@
 __version__ = "2.0.0"
 
-from .models import TFNO, FNO, RNO, get_model
+from .models import TFNO, FNO, RNO, WNO, get_model
 from .data import datasets, transforms
 from . import mpu
 from .training import Trainer
