@@ -49,6 +49,46 @@ Tensorized FNO (TFNO)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _oformer_api:
+
+Operator Transformer (OFormer)
+------------------------------
+
+OFormer implements the static two-dimensional encoder and coordinate-conditioned
+decoder used by the authors for Darcy flow. It combines linear Galerkin attention,
+rotary spatial embeddings, and Fourier features for output coordinates. The
+authors' time-dependent rollout architectures are outside this implementation.
+
+Field values may be supplied as channel-first grids ``(batch, channels, H, W)``
+or point samples ``(batch, points, channels)``. Point samples require
+``input_geom`` coordinates. Input coordinates and ``output_queries`` accept
+``(points, 2)``, ``(1, points, 2)``, or ``(batch, points, 2)``. Coordinates for
+grid inputs are generated on the endpoint-inclusive unit square, with ``ij``
+indexing; explicit input coordinates may override them.
+
+By default the output uses the input geometry and layout. ``output_queries``
+evaluates arbitrary points and returns ``(batch, query_points, out_channels)``.
+Alternatively, ``output_shape=(H_out, W_out)`` queries an endpoint-inclusive
+regular grid and returns a channel-first field. The ``resolution`` constructor
+argument calibrates rotary frequencies; it is held fixed when evaluating a
+model on different grids.
+
+``load_author_state_dict(encoder_state_dict, decoder_state_dict)`` loads the
+authors' separate parameter dictionaries strictly. The constructor must match
+the checkpoint architecture. Input/output normalization and any boundary
+masking remain external: loading weights alone does not reproduce a complete
+pretrained inference pipeline. No pretrained weights are downloaded by model
+construction. See :ref:`oformer_synthetic_example` for a synthetic inference
+example that does not train a model or download data.
+
+.. autosummary::
+    :toctree: generated
+    :template: class.rst
+
+    OFormer
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. _sfno_api:
 
 Spherical Fourier Neural Operators (SFNO)

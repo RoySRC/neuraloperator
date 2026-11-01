@@ -233,3 +233,20 @@ class OTNO_Small2d(OTNOConfig):
     hidden_channels: int = 64
     data_channels: int = 9
     out_channels: int = 1
+
+
+class OFormerConfig(ModelConfig):
+    """Static 2D OFormer; field channels exclude the two spatial coordinates."""
+
+    model_arch: str = "oformer"
+    data_channels: int = 1
+    out_channels: int = 1
+    hidden_channels: int = 96
+    latent_channels: int = 256
+    n_layers: int = 6
+    n_heads: int = 4
+    resolution: int = 211
+    coordinate_scale: float = 0.5
+    use_layer_norm: bool = True
+    embedding_dropout: float = 0.05
+    attention_dropout: float = 0.03
